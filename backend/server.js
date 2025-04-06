@@ -1,23 +1,30 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const dotenv = require("dotenv");  // ✅ Import dotenv
+const dotenv = require("dotenv");
 
-dotenv.config();  // ✅ Load .env variables
+dotenv.config(); // Load .env variables
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Import routes
+const authRoutes = require("./routes/auth");
 const aiInsightsRoutes = require("./routes/aiInsights");
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+})
+.then(() => console.log(" MongoDB Connected"))
+.catch(err => console.error("MongoDB Connection Error:", err));
 
-app.use("/auth", require("./routes/auth"));
+// Routes
+app.use("/auth", authRoutes);
 app.use("/api/ai-insights", aiInsightsRoutes);
 
-app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
