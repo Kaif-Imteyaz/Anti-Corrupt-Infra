@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ["citizen", "ward_member", "gram_panchayat"], default: "citizen", required: true },
   govCredential: { type: String, required: true }, // For officials
-}, //{ timestamps: true });
+}, //{ timestamps: true }
+);
 
 module.exports = mongoose.model("User", UserSchema);
